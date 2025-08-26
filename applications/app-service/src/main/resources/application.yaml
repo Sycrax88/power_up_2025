@@ -1,14 +1,50 @@
-##Spring Configuration
 server:
   port: 8080
+
 spring:
   application:
-    name: power_up_2025--lombok&#61;true
+    name: CrediYa-Service
+  
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/crediya
+    username: crediya_user
+    password: crediya_pass
+    pool:
+      initial-size: 10
+      max-size: 20
+      max-idle-time: 30m
+      validation-query: SELECT 1
+  
+  flyway:
+    url: jdbc:postgresql://localhost:5432/crediya
+    user: crediya_user
+    password: crediya_pass
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: /h2
+    
   profiles:
     include:
+
+app:
+  version: 1.0.0
+
+logging:
+  level:
+    co.com.pragma: DEBUG
+    org.springframework.r2dbc: DEBUG
+    org.springframework.transaction: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level [%X{traceId:-}] %logger{36} - %msg%n"
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+    display-request-duration: true
+    display-operation-id: true
